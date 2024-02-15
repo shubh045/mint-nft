@@ -14,7 +14,7 @@ contract NFT is ERC721, Ownable {
     address payable public withdrawWallet;
     mapping(address => uint) public walletMints;
 
-    constructor(string memory _name, string memory _symbol, uint _mintPrice, uint _maxSupply) payable ERC721(_name, _symbol){
+    constructor(string memory _name, string memory _symbol, uint _mintPrice, uint _maxSupply) payable ERC721(_name, _symbol) Ownable(msg.sender) {
         mintPrice = _mintPrice;
         totalSupply = 0;
         maxSupply = _maxSupply;
@@ -30,7 +30,7 @@ contract NFT is ERC721, Ownable {
     }
 
     function tokenURI(uint _tokenId) public view override returns(string memory) {
-        require(_exists(_tokenId), 'Token does not exist');
+        require(_ownerOf(_tokenId) != address(0), 'Token does not exist');
         return string(abi.encodePacked(baseTokenUri, Strings.toString(_tokenId), ".json"));
     }
 
