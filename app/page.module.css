@@ -21,11 +21,41 @@
 
 .box{
   width: 50%;
-  height: 50%;
+  height: 60%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
   background-color: #424769;
   border-radius: 10px;
+  gap: 20px;
+}
+
+.imageContainer{
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  width: 100%;
+  height: 75%;
+  border-radius: 10px;
+}
+
+.image{
+  width: 80%;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.mintBtn{
+  width: 80%;
+  height: 40px;
+  font-size: 18px;
+  background-color: #dc843d;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+.mintBtn:hover{
+  background-color: #a46809;
 }

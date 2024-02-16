@@ -3,7 +3,10 @@
 import styles from "./page.module.css";
 import {useState, useEffect} from "react";
 import {ethers} from "ethers";
-import NFT from "./NFT.json";
+import NFT from "./assests/abi/NFT.json";
+import {toast, ToastContainer } from "react-toastify";
+import Image from 'next/image';
+import nft from './assests/images/nft.jpg'
 
 export default function Home() {
   const [account, setAccount] = useState("");
@@ -22,7 +25,7 @@ export default function Home() {
         const contract = new ethers.Contract(contractAddress, NFT.abi, signer);
         setContract(contract);
       }else{
-        alert("Metamask is not connected");
+        toast("Metamask is not connected");
       }
     }
 
@@ -36,11 +39,13 @@ export default function Home() {
       </nav>
       <div className={styles.mintCon}>
         <div className={styles.box}>
-          <div>
-            <img src="" alt="" />
+          <div className={styles.imageContainer}>
+            <Image src={nft} alt="" className={styles.image} />
           </div>
+          <button className={styles.mintBtn}>Mint</button>
         </div>
       </div>
+      <ToastContainer position="top-left" />
     </>
   );
 }
