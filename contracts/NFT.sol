@@ -47,6 +47,7 @@ contract NFT is ERC721URIStorage, Ownable {
 
         // uint newTokenId = totalSupply + 1;
         totalSupply++;
+        walletMints[msg.sender]++;
         _safeMint(msg.sender, _tokenId);
         _setTokenURI(_tokenId, _uri);
     }
