@@ -13,7 +13,7 @@ export default function Home() {
   const [account, setAccount] = useState("");
   const [contract, setContract] = useState(null);
   const [loading, setLoading] = useState(false);
-  const contractAddress = "0xc839B7DAa6fEaeBB3dcE24D1D0b7f2B59aF3609a";
+  const contractAddress = "0x7Be38e46f27fead7EcB4e3435f729bcc4E54bF4a";
 
   useEffect(() => {
     const provider = new ethers.BrowserProvider(window.ethereum);
@@ -61,12 +61,11 @@ export default function Home() {
     setLoading(true);
     try {
       const options = { value: ethers.parseEther("0.02") };
-      const mints = await contract.walletMints(account);
-      const totalSupply = await contract.totalSupply();
-      if (parseInt(mints) > 0) {
-        throw new Error("You have already minted the nft.");
-      }
-      const mint = await contract.mint(totalSupply, tokenURI, options);
+      // const mints = await contract.walletMints(account);
+      // if (parseInt(mints) > 0) {
+      //   throw new Error("You have already minted the nft.");
+      // }
+      const mint = await contract.mint(tokenURI, options);
       await mint.wait();
       toast("Mint Successful");
     } catch (error) {
