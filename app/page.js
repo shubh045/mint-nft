@@ -3,11 +3,11 @@
 import styles from "./page.module.css";
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import NFT from "./assests/abi/NFT.json";
+import NFT from "./assets/abi/NFT.json";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
-import nft from "./assests/images/nft.jpg";
+import nft from "./assets/images/nft.jpg";
 
 export default function Home() {
   const [account, setAccount] = useState("");
