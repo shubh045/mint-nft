@@ -3,10 +3,12 @@ pragma solidity ^0.8.0;
 
 import '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+// import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import '@openzeppelin/contracts/access/Ownable.sol';
 
 contract NFT is ERC721URIStorage,ERC721Enumerable, Ownable {
     uint public mintPrice;
+    uint private nextTokenId;
     // uint public totalSupply;
     // uint public maxSupply;
     // uint public maxPerWallet;
@@ -35,7 +37,7 @@ contract NFT is ERC721URIStorage,ERC721Enumerable, Ownable {
         // require(totalSupply <= maxSupply, "Sold out");
         // require(walletMints[msg.sender] < maxPerWallet, "Exceed max quantity");
 
-        uint newTokenId = totalSupply();
+        uint newTokenId = nextTokenId++;
         walletMints[msg.sender]++;
         _safeMint(msg.sender, newTokenId);
         _setTokenURI(newTokenId, _uri);
@@ -73,5 +75,13 @@ contract NFT is ERC721URIStorage,ERC721Enumerable, Ownable {
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
+    }
+
+    function burn(uint256 tokenId, uint mintAmount) public {
+        // Setting an "auth" arguments enables the `_isAuthorized` check which verifies that the token exists
+        // (from != 0). Therefore, it is not needed to verify that the return value is not 0 here.
+        _update(address(0), tokenId, _msgSender());
+
+        payable(msg.sender).transfer(mintAmount);
     }
 }

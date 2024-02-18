@@ -16,8 +16,8 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [connect, setConnect] = useState("");
   const [nfts, setNfts] = useState([]);
-  // const contractAddress = "0x7Be38e46f27fead7EcB4e3435f729bcc4E54bF4a";
-  const contractAddress = "0xe01128a67b3cBE0cE89b718cB55D0267a1C2e0B9";
+  const [selected, setSelected] = useState([]);
+  const contractAddress = "0x4D67269a03c23360D045E8e242375bb03A41D84a";
 
   useEffect(() => {
     setConnect(localStorage.getItem("address"));
@@ -75,6 +75,7 @@ export default function Home() {
           const tokenMetadata = await fetch(tokenMetadatURI).then((response) =>
             response.json()
           );
+          tokenMetadata.tokenId = parseInt(tokenId);
           allNFTs.push(tokenMetadata);
         }
         setNfts(allNFTs);
@@ -134,18 +135,33 @@ export default function Home() {
     setLoading(true);
     try {
       const options = { value: ethers.parseEther("0.02") };
-      // const mints = await contract.walletMints(account);
-      // if (parseInt(mints) > 0) {
-      //   throw new Error("You have already minted the nft.");
-      // }
       const mint = await contract.mint(tokenURI, options);
       await mint.wait();
+      window.location.reload()
       toast("Mint Successful");
     } catch (error) {
       const errorMessage = error.message.split("(")[0];
       toast(errorMessage);
     }
     setLoading(false);
+  };
+
+  const burnNFT = async () => {
+    try {
+      for (let i = 0; i < selected.length; i++) {
+        const burning = await contract.burn(
+          selected[i],
+          ethers.parseEther("0.02")
+        );
+        await burning.wait();
+      }
+      window.location.reload()
+      toast("Burn complete");
+    } catch (error) {
+      const errorMessage = error.message.split("(")[0];
+      toast(errorMessage);
+      console.log(error);
+    }
   };
 
   return (
@@ -178,11 +194,28 @@ export default function Home() {
               </button>
             )}
           </div>
-          <div className={styles.nftCont}>
-            {nfts.map((data, index) => (
-              <NFT1 image={data.image} key={index} />
-            ))}
-          </div>
+          {nfts.length > 0 && (
+            <div className={styles.burnNftCont}>
+              <button
+                disabled={selected.length < 1 && true}
+                className={styles.burnBtn}
+                onClick={burnNFT}
+              >
+                Burn
+              </button>
+              <div className={nfts.length && styles.nftCont}>
+                {[...nfts].map((data) => (
+                  <NFT1
+                    image={data.image}
+                    id={data.tokenId}
+                    selected={selected}
+                    setSelected={setSelected}
+                    key={data.tokenId}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>

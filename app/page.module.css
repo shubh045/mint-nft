@@ -1,7 +1,7 @@
-.navbar{
+.navbar {
   width: 100%;
   height: 50px;
-  background-color: #7077A1;
+  background-color: #7077a1;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -10,11 +10,11 @@
   position: fixed;
 }
 
-.heading{
+.heading {
   letter-spacing: 2px;
 }
 
-.connectBtn{
+.connectBtn {
   padding: 5px 15px;
   font-size: 16px;
   background-color: #a46809;
@@ -23,15 +23,15 @@
   border-radius: 5px;
 }
 
-.connectBtn:hover{
+.connectBtn:hover {
   background-color: #dc843d;
 }
 
-.userAddress{
+.userAddress {
   font-size: 20px;
 }
 
-.mintCon{
+.mintCon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -40,7 +40,7 @@
   flex-direction: column;
 }
 
-.box{
+.box {
   width: 50%;
   height: 70%;
   display: flex;
@@ -49,11 +49,11 @@
   background-color: #424769;
   border-radius: 10px;
   gap: 20px;
-  margin-top: 150px;
-  padding-bottom: 10px;
+  margin-top: 5%;
+  /* padding-bottom: 10px; */
 }
 
-.imageContainer{
+.imageContainer {
   display: flex;
   justify-content: center;
   margin-top: 30px;
@@ -62,13 +62,13 @@
   border-radius: 10px;
 }
 
-.image{
+.image {
   width: 80%;
   height: 100%;
   border-radius: 10px;
 }
 
-.mintBtn{
+.mintBtn {
   width: 80%;
   height: 40px;
   font-size: 18px;
@@ -77,9 +77,10 @@
   border-radius: 10px;
   cursor: pointer;
   letter-spacing: 1px;
+  position: relative;
 }
 
-.mintBtn:hover{
+.mintBtn:hover {
   background-color: #a46809;
 }
 
@@ -94,30 +95,52 @@
 .spinner {
   animation: 1.5s linear infinite spinner;
   animation-play-state: inherit;
-  border: solid 5px #E8C872;
+  border: solid 5px #e8c872;
   border-bottom-color: #424769;
   border-radius: 50%;
   content: "";
   height: 25px;
   width: 25px;
   position: absolute;
-  top: 65.8%;
+  top: 50%;
   left: 50%;
   transform: translate3d(-50%, -50%, 0);
   will-change: transform;
 }
 
-.nftCont{
+.nftCont {
   display: flex;
   gap: 30px;
   flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.burnNftCont {
   width: 50%;
   margin: auto;
-  align-items: center;
   background-color: #424769;
   margin-top: 10px;
   padding: 10px;
-  justify-content: space-around;
   margin-bottom: 50px;
   border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.burnBtn {
+  padding: 5px 15px;
+  border-radius: 4px;
+  background-color: #dc843d;
+  cursor: pointer;
+  border: none;
+}
+
+.burnBtn:disabled {
+  cursor: not-allowed;
+  background-color: #a46809;
+  border: none;
+  color: #bcb9b9;
 }
