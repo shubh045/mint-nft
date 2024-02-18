@@ -179,8 +179,8 @@ export default function Home() {
             )}
           </div>
           <div className={styles.nftCont}>
-            {nfts.map((data) => (
-              <NFT1 image={data.image} />
+            {nfts.map((data, index) => (
+              <NFT1 image={data.image} key={index} />
             ))}
           </div>
         </div>
