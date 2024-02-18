@@ -8,7 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
 import nft from "./assets/images/nft.jpg";
-import NFT1 from "./components/NFT";
+import NFT1 from "../components/NFT";
 
 export default function Home() {
   const [account, setAccount] = useState("");
