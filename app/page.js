@@ -8,15 +8,20 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
 import nft from "./assets/images/nft.jpg";
+import NFT1 from "./components/NFT";
 
 export default function Home() {
   const [account, setAccount] = useState("");
   const [contract, setContract] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [connect, setConnect] = useState(
-   typeof window !== "undefined" ? localStorage.getItem("address") : false
-  );
-  const contractAddress = "0x7Be38e46f27fead7EcB4e3435f729bcc4E54bF4a";
+  const [connect, setConnect] = useState("");
+  const [nfts, setNfts] = useState([]);
+  // const contractAddress = "0x7Be38e46f27fead7EcB4e3435f729bcc4E54bF4a";
+  const contractAddress = "0xe01128a67b3cBE0cE89b718cB55D0267a1C2e0B9";
+
+  useEffect(() => {
+    setConnect(localStorage.getItem("address"));
+  }, []);
 
   useEffect(() => {
     const provider = new ethers.BrowserProvider(window.ethereum);
@@ -40,6 +45,47 @@ export default function Home() {
       }
     });
   }, []);
+
+  useEffect(() => {
+    const setContractVal = async () => {
+      try {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, NFT.abi, signer);
+        setContract(contract);
+
+        const allNFTs = [];
+        const totalNFTs = parseInt(
+          await contract.balanceOf(await signer.getAddress())
+        );
+        for (let i = 0; i < totalNFTs; i++) {
+          const tokenId = await contract.tokenOfOwnerByIndex(
+            await signer.getAddress(),
+            i
+          );
+
+          let tokenMetadatURI = await contract.tokenURI(tokenId);
+
+          if (tokenMetadatURI.startsWith("ipfs://")) {
+            tokenMetadatURI = `https://ipfs.io/ipfs/${
+              tokenMetadatURI.split("ipfs://")[1]
+            }`;
+          }
+
+          const tokenMetadata = await fetch(tokenMetadatURI).then((response) =>
+            response.json()
+          );
+          allNFTs.push(tokenMetadata);
+        }
+        setNfts(allNFTs);
+      } catch (error) {
+        const errorMessage = error.message.split("(")[0];
+        toast(errorMessage);
+      }
+    };
+
+    setContractVal();
+  }, [connect]);
 
   const connectWallet = async () => {
     try {
@@ -131,6 +177,11 @@ export default function Home() {
                 {loading && <p className={styles.spinner}></p>}
               </button>
             )}
+          </div>
+          <div className={styles.nftCont}>
+            {nfts.map((data) => (
+              <NFT1 image={data.image} />
+            ))}
           </div>
         </div>
       </div>
