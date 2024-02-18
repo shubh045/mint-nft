@@ -13,32 +13,57 @@ export default function Home() {
   const [account, setAccount] = useState("");
   const [contract, setContract] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [connect, setConnect] = useState(localStorage.getItem("address"));
   const contractAddress = "0x7Be38e46f27fead7EcB4e3435f729bcc4E54bF4a";
 
   useEffect(() => {
     const provider = new ethers.BrowserProvider(window.ethereum);
-    const connectWallet = async () => {
-      if (provider) {
-        await provider.send("eth_requestAccounts", []);
+    window.ethereum.on("accountsChanged", async () => {
+      try {
         const signer = await provider.getSigner();
         const address = await signer.getAddress();
         setAccount(address);
+        localStorage.setItem("address", address);
+        setConnect(localStorage.getItem("address"));
+      } catch (error) {
+        const accounts = await provider.listAccounts();
+        if (accounts.length == 0) {
+          localStorage.removeItem("address");
+          setConnect(false);
+          toast("Account not connected!");
+          return;
+        }
+        const errorMessage = error.message.split("(")[0];
+        toast(errorMessage);
+      }
+    });
+  }, []);
 
-        window.ethereum.on("accountsChanged", async () => {
+  const connectWallet = async () => {
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      if (!connect) {
+        const accounts = await provider.send("eth_requestAccounts", []);
+        if (accounts) {
           const signer = await provider.getSigner();
           const address = await signer.getAddress();
           setAccount(address);
-        });
+          localStorage.setItem("address", address);
 
-        const contract = new ethers.Contract(contractAddress, NFT.abi, signer);
-        setContract(contract);
-      } else {
-        toast("Metamask is not connected");
+          const contract = new ethers.Contract(
+            contractAddress,
+            NFT.abi,
+            signer
+          );
+          setContract(contract);
+          setConnect(localStorage.getItem("address"));
+        }
       }
-    };
-
-    provider && connectWallet();
-  }, [account]);
+    } catch (error) {
+      const errorMessage = error.message.split("(")[0];
+      toast(errorMessage);
+    }
+  };
 
   const mintNFT = async () => {
     const provider = new ethers.BrowserProvider(window.ethereum);
@@ -81,16 +106,29 @@ export default function Home() {
       <div>
         <nav className={styles.navbar}>
           <h2 className={styles.heading}>MINFT</h2>
+          {connect ? (
+            <p className={styles.userAddress}>
+              {`${localStorage.getItem("address").slice(0, 7)}...${localStorage
+                .getItem("address")
+                .slice(-5)}`}
+            </p>
+          ) : (
+            <button className={styles.connectBtn} onClick={connectWallet}>
+              Connect
+            </button>
+          )}
         </nav>
         <div className={styles.mintCon}>
           <div className={styles.box}>
             <div className={styles.imageContainer}>
               <Image src={nft} alt="" className={styles.image} />
             </div>
-            <button className={styles.mintBtn} onClick={mintNFT}>
-              {!loading && "Mint"}
-              {loading && <p className={styles.spinner}></p>}
-            </button>
+            {connect && (
+              <button className={styles.mintBtn} onClick={mintNFT}>
+                {!loading && "Mint"}
+                {loading && <p className={styles.spinner}></p>}
+              </button>
+            )}
           </div>
         </div>
       </div>
