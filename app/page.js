@@ -13,7 +13,7 @@ export default function Home() {
   const [account, setAccount] = useState("");
   const [contract, setContract] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [connect, setConnect] = useState(localStorage ? localStorage.getItem("address") : false);
+  const [connect, setConnect] = useState(localStorage!=="undefined" ? localStorage.getItem("address") : false);
   const contractAddress = "0x7Be38e46f27fead7EcB4e3435f729bcc4E54bF4a";
 
   useEffect(() => {
