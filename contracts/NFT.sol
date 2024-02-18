@@ -2,11 +2,12 @@
 pragma solidity ^0.8.0;
 
 import '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import '@openzeppelin/contracts/access/Ownable.sol';
 
-contract NFT is ERC721URIStorage, Ownable {
+contract NFT is ERC721URIStorage,ERC721Enumerable, Ownable {
     uint public mintPrice;
-    uint public totalSupply;
+    // uint public totalSupply;
     // uint public maxSupply;
     // uint public maxPerWallet;
     bool public isPublicMintEnabled;
@@ -14,7 +15,7 @@ contract NFT is ERC721URIStorage, Ownable {
 
     constructor(string memory _name, string memory _symbol, uint _mintPrice) payable ERC721(_name, _symbol) Ownable(msg.sender) {
         mintPrice = _mintPrice;
-        totalSupply = 0;
+        // totalSupply = 0;
         // maxSupply = _maxSupply;
         // maxPerWallet = 1;
     }
@@ -34,10 +35,43 @@ contract NFT is ERC721URIStorage, Ownable {
         // require(totalSupply <= maxSupply, "Sold out");
         // require(walletMints[msg.sender] < maxPerWallet, "Exceed max quantity");
 
-        uint newTokenId = totalSupply;
-        totalSupply++;
+        uint newTokenId = totalSupply();
         walletMints[msg.sender]++;
         _safeMint(msg.sender, newTokenId);
         _setTokenURI(newTokenId, _uri);
+    }
+
+    // required overrides
+    function _update(address to, uint256 tokenId, address auth)
+        internal
+        override(ERC721, ERC721Enumerable)
+        returns (address)
+    {
+        return super._update(to, tokenId, auth);
+    }
+
+    function _increaseBalance(address account, uint128 value)
+        internal
+        override(ERC721, ERC721Enumerable)
+    {
+        super._increaseBalance(account, value);
+    }
+
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override(ERC721, ERC721URIStorage)
+        returns (string memory)
+    {
+        return super.tokenURI(tokenId);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721Enumerable, ERC721URIStorage)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
     }
 }
