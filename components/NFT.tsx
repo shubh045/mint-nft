@@ -1,22 +1,31 @@
 "use client";
 
+import React from "react";
 import styles from "./nft.module.css";
 import { useState } from "react";
 
-const NFT = ({ image, id,selected, setSelected }) => {
-  const [isChecked, setIsChecked] = useState(false);
+interface NFTProps {
+  image: string;
+  id: number;
+  selected: number[];
+  setSelected: React.Dispatch<React.SetStateAction<number[]>>;
+  key: number
+}
 
-  const handleChange = () => {
-    setIsChecked(!isChecked)
+const NFT = ({ image, id, selected, setSelected }: NFTProps): React.JSX.Element => {
+  const [isChecked, setIsChecked] = useState<boolean>(false);
 
-    if(!isChecked){
-      setSelected(prev => [...prev, id]);
-    }else{
+  const handleChange = (): void => {
+    setIsChecked(!isChecked);
+
+    if (!isChecked) {
+      setSelected((prev) => [...prev, id]);
+    } else {
       const index = selected.indexOf(id);
-      setSelected(prev => [...prev, ...prev.splice(index, 1)]);
-      console.log(selected)
+      setSelected((prev) => [...prev, ...prev.splice(index, 1)]);
+      console.log(selected);
     }
-  }
+  };
 
   return (
     <div className={styles.showNft}>

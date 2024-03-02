@@ -1,8 +1,8 @@
-const hre = require("hardhat");
+import {ethers} from "hardhat";
 
 async function main() {
 
-  const NFT = await hre.ethers.deployContract("NFT", ["Super Car", "SUP", hre.ethers.parseEther('0.02')]);
+  const NFT = await ethers.deployContract("NFT", ["Super Car", "SUP", ethers.parseEther('0.02')]);
 
   await NFT.waitForDeployment();
 

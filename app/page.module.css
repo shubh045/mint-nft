@@ -108,6 +108,11 @@
   will-change: transform;
 }
 
+.spinner1{
+  width: 20px;
+  height: 20px;
+}
+
 .nftCont {
   display: flex;
   gap: 30px;
@@ -131,14 +136,18 @@
 }
 
 .burnBtn {
-  padding: 5px 15px;
+  /* padding: 5px 15px; */
+  text-align: center;
   border-radius: 4px;
   background-color: #dc843d;
   cursor: pointer;
   border: none;
+  width: 50px;
+  height: 30px;
+  position: relative;
 }
 
-.burnBtn:disabled {
+.burnBtn:disabled, .mintBtn:disabled {
   cursor: not-allowed;
   background-color: #a46809;
   border: none;
