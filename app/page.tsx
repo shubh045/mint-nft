@@ -28,7 +28,7 @@ export default function Home() {
   const contractAddress: string = "0x6fEaC1c5a4E33dD7976188bDb55523eA4fc229Ba";
 
   useEffect(() => {
-    setConnect(String(localStorage.getItem("address")));
+    setConnect(localStorage.getItem("address"));
   }, []);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function Home() {
         const address: string = await signer.getAddress();
         setAccount(address);
         localStorage.setItem("address", address);
-        setConnect(String(localStorage.getItem("address")));
+        setConnect(localStorage.getItem("address"));
       } catch (error) {
         const accounts: ethers.JsonRpcSigner[] = await provider.listAccounts();
         if (accounts.length == 0) {
@@ -146,7 +146,7 @@ export default function Home() {
             signer
           ) as BaseContract as NFT;
           setContract(contract);
-          setConnect(String(localStorage.getItem("address")));
+          setConnect(localStorage.getItem("address"));
         }
       }
     } catch (error) {
@@ -221,9 +221,9 @@ export default function Home() {
           <h2 className={styles.heading}>MINFT</h2>
           {connect ? (
             <p className={styles.userAddress}>
-              {`${String(
-                localStorage.getItem("address")?.slice(0, 7)
-              )}...${String(localStorage.getItem("address")?.slice(-5))}`}
+              {`${localStorage.getItem("address")?.slice(0, 7)}...${localStorage
+                .getItem("address")
+                ?.slice(-5)}`}
             </p>
           ) : (
             <button className={styles.connectBtn} onClick={connectWallet}>
@@ -250,12 +250,14 @@ export default function Home() {
           {nfts.length > 0 && (
             <div className={styles.burnNftCont}>
               <button
-                disabled={selected.length==0 || (loading || burnLoading)}
+                disabled={selected.length == 0 || loading || burnLoading}
                 className={styles.burnBtn}
                 onClick={burnNFT}
               >
                 {!burnLoading && "Burn"}
-                {burnLoading && <p className={`${styles.spinner} ${styles.spinner1}`}></p>}
+                {burnLoading && (
+                  <p className={`${styles.spinner} ${styles.spinner1}`}></p>
+                )}
               </button>
               <div className={nfts.length.toString() && styles.nftCont}>
                 {[...nfts].map((data) => (
